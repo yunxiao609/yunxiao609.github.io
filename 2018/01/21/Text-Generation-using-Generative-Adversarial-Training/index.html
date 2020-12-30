@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>论文阅读-对抗训练文本生成 | 筠筱的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="论文名： Text Generation using Generative Adversarial Training  LSTM初步学习 一种改进的GAN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读-对抗训练文本生成">
+<meta property="og:url" content="http://example.com/2018/01/21/Text-Generation-using-Generative-Adversarial-Training/index.html">
+<meta property="og:site_name" content="筠筱的博客">
+<meta property="og:description" content="论文名： Text Generation using Generative Adversarial Training  LSTM初步学习 一种改进的GAN">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-1.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-2.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-3.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-4.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-5.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-6.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-7.png">
+<meta property="og:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-8.png">
+<meta property="article:published_time" content="2018-01-21T07:12:08.000Z">
+<meta property="article:modified_time" content="2020-12-21T05:17:23.103Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="GANs">
+<meta property="article:tag" content="零和博弈">
+<meta property="article:tag" content="LSTMs">
+<meta property="article:tag" content="GRUs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Text_Generation_using_Generative_Adversarial_Training/pic1-1.png">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">筠筱的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不被理想束缚的生活</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/links">Links</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Text-Generation-using-Generative-Adversarial-Training" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2018/01/21/Text-Generation-using-Generative-Adversarial-Training/" class="article-date">
+  <time class="dt-published" datetime="2018-01-21T07:12:08.000Z" itemprop="datePublished">2018-01-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      论文阅读-对抗训练文本生成
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="论文名">论文名：</h2>
+<p><em>Text Generation using Generative Adversarial Training</em></p>
+<ul>
+<li><p>LSTM初步学习</p></li>
+<li><p>一种改进的GAN</p></li>
+</ul>
+<a id="more"></a>
+<h3 id="wasserstein-gans">Wasserstein GANs</h3>
+<p>由于原始GANs存在着训练困难、生成器和鉴别器的loss无法指示训练进程、生成样本缺乏多样性等问题，所以提出了WGANs的概念。它的优点有：彻底解决了GANs训练不稳定的问题；确保了生成样本的多样性；训练过程中有一个可以指示训练进程的数值；不需要精心设计的网络架构，最简单的多层全连接网络就可以做到。</p>
+<p>实际上，对比原始GANs算法，WGANs做了如下改进：</p>
+<ol type="1">
+<li><p>鉴别器最后一层不使用sigmoid激活函数</p></li>
+<li><p>生成器和鉴别器的loss不取log</p></li>
+<li><p>每次更新鉴别器的参数之后把它们的绝对值截断到不超过一个固定常数c</p></li>
+<li><p>不要用基于动量的优化算法（包括momentum和Adam），推荐RMSProp，SGD也行</p></li>
+</ol>
+<h3 id="lstms">LSTMs</h3>
+<p><strong>LSTMs</strong>是一种特别的RNNs，比标准的 RNNs 在很多的任务上都表现得更好。</p>
+<p>如果相关信息和当前预测位置之间的间隔不断增加得相当大，RNNs 会丧失学习到连接如此远的信息的能力。但是LSTMs并不存在这样的问题，它可以学习长期依赖信息。</p>
+<p>LSTMs的核心是元胞，a它是一条穿过LSTMs图表的水平线。也可以将元胞理解为一条链，信息能够很容易流过这个链并且不发生大的改变。</p>
+<p>LSTMs有能力对元胞添加或删除信息，这个行为由一个叫做“门”的结构来控制。</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-1.png"></p>
+<p><span class="math display">\[图1.1 \qquad LSTM元胞的门结构\]</span></p>
+<p>上图称为LSTMs中称为“门”的结构，是一种让信息选择性通过的方法，它包含一个sigmoid神经网络层和一个pointwise乘法操作。</p>
+<p>Sigmoid 层输出 0 到 1 之间的数值，描述每个部分有多少量可以通过。0代表“不许任何量通过”，1 就指“允许任意量通过”！一般情况下，LSTMs 拥有三个类似门，以保护和控制细胞状态。</p>
+<h4 id="分布详解lstm">分布详解LSTM</h4>
+<p>第一步是决定需要从元胞忽略掉什么样的信息，该决定由一个叫做“遗忘门”的sigmoid层控制。它观察<span class="math inline">\(h_{t-1}\)</span>和<span class="math inline">\(x_{t}\)</span>这两个值，并且对于元胞状态<span class="math inline">\(C_{t-1}\)</span>中的每个数字输出一个介于01之间的值。1表示完全保留信息，0表示完全丢弃信息，即：</p>
+<p><span class="math inline">\(f_{t}=\sigma\left(W_{f} \cdot\left[h_{t-1}, x_{t}\right]+b_{f}\right) \tag{1.1}\)</span></p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-2.png"></p>
+<p align="center">
+图1.2
+</p>
+<p>下一步是决定我们将会把哪些新信息存储到元胞状态中。这步分为两部分。首先，有一个叫做“输入门”的Sigmoid层决定我们要更新哪些信息。接下来，一个tanh层创造了一个新的候选值<span class="math inline">\(\tilde{C}_{t}\)</span>。该值可能被加入到元胞状态中。</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-3.png"></p>
+<p align="center">
+图1.3
+</p>
+<p><span class="math inline">\(i_{t}=\sigma\left(W_{i} \cdot\left[h_{t-1}, x_{t}\right]+b_{i}\right. \tag{1.2}\)</span></p>
+<p><span class="math inline">\(\tilde{C}_{t}=\tanh \left(W_{C} \cdot\left[h_{t-1}, x_{t}\right]+b_{C}\right) \tag{1.3}\)</span></p>
+<p>第三步：</p>
+<p>按照之前的决定，扔掉了旧的主语的性别信息，并且添加了新的信息。</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-4.png"></p>
+<p align="center">
+图1.4
+</p>
+<p><span class="math inline">\(C_{t}=f_{t} * C_{t-1}+i_{t} * \tilde{C}_{t} \tag{1.4}\)</span></p>
+<p>最后一步，需要决定最终的输出。首先建立一个Sigmoid层的输出门，来决定我们将输出元胞的哪些部分。然后将元胞状态通过tanh之后（使得输出值在-1到1之间），与输出门相乘，这样只会输出我们想输出的部分。</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-5.png"></p>
+<p align="center">
+图1.5
+</p>
+<p><span class="math inline">\(o_{t}=\sigma\left(W_{o}\left[h_{t-1}, x_{t}\right]+b_{o}\right) \tag{1.5}\)</span></p>
+<p><span class="math inline">\(h_{t}=o_{t} * \tanh \left(C_{t}\right) \tag{1.6}\)</span></p>
+<h3 id="简介">简介</h3>
+<p>基于RNN的模型已经被广泛应用于语言建模，机器翻译，语音识别和图像字幕等类似的生成任务中。<strong>RNNs最显著的能力是获取时间序列中的重要特征</strong>。(查阅资料知，时序数据是同一种现象在不同时间上的相继观察值排列而成的一组数字值序列，其时间轴上的采样值通常又被称为特征。一般情况下，对时序的特征提取是在分类前对数据时间采样值上进行适量的归约，以达到减少数据量同时提高分类准确率。而RNNs对于时序重要特征的提取十分方便。)</p>
+<p>在生成好的RNNs模型中，来自前一时间步的单词被迭代到下一个时间步，但是，由于训练期间只有训练数据被模型看到，而且在优化过程中可能出现采样过程中的偏移，这会导致生成的句子在语法上有误。</p>
+<p>论文提出的<strong>问题是通过GANs中的对抗训练策略是否会应用于文本的生成，抑或是改进文本的生成</strong>。作者研究了生成器和鉴别器的不同结构，并且最终会<strong>根据生成的文本来评估训练的得到的模型</strong>。</p>
+<h3 id="需要做的工作">需要做的工作</h3>
+<p>GANs相比较其他深度生成模型具有一些优势，例如，与玻尔兹曼机（简称BM，是一种随机递归神经网络，其样本分布遵循玻尔兹曼分布。它由二值神经元构成，每个神经元只取0或1两种状态，1表示接通，0表示断开。）和非线性独立分量分析对比，GANs对生成器功能的限制较少，它不需要马尔科夫链。还有，变分自动编码器对模型的假设较弱，而GANs被设计为无偏的，最起码在视觉领域它生成的样本质量更好。</p>
+<p>基于RNNs的语言模型可以获得长期的依赖关系。 使用门控循环单元（GRUs）作为发生器和鉴别器来训练GANs，与vanilla RNNs相比。由于图像数据是一堆像素的乘积，而文本生成本质上是离散的，因为文本是由一系列字词标点组成，这使得来自鉴别器的梯度难以反向传播到生成器。</p>
+<p>现在提出了一种使用对抗目标训练RNNs的技术。对抗目标具有正则化效应，并且有助于RNNs训练的收敛。</p>
+<p>SeqGANs将数据生成器建模为强化学习中的随机策略，奖励信号来自在完整序列上判断的鉴别器，并使用蒙特卡洛搜索传递到中间状态步骤。WGANs提供了严格的理论分析并且通过使用EM距离来提高GANs的表现。训练WGANs的优点是不需要对网络结构仔细设计的要求。我们的目标就是平衡生成器和鉴别器两者，防止他们一个压制另一个。</p>
+<h3 id="具体方法">具体方法</h3>
+<h4 id="训练设置">训练设置</h4>
+<p>主要使用GRUs作为构建块，并使用vanilla RNNs作为比较。GRUs在计算上比LSTMs便宜，但在对序列建模中具有相当的性能。</p>
+<p><strong>更新门</strong>：</p>
+<p><span class="math inline">\(z_{t}=\sigma\left(W_{t} x_{t}+U_{z} h_{t-1}\right) \tag{1.7}\)</span></p>
+<p><strong>重置门</strong>：</p>
+<p><span class="math inline">\(r_{t}=\sigma\left(W_{r} x_{t}+U_{r} h_{t-1}\right) \tag{1.8}\)</span></p>
+<p><strong>新记忆</strong>：</p>
+<p><span class="math inline">\(\tilde{h}_{t}=\tanh \left(r_{t} \circ U h_{t-1}+W x_{t}\right) \tag{1.9}\)</span></p>
+<p><strong>隐藏状态</strong>：</p>
+<p><span class="math inline">\(h_{t}=\left(1-z_{t}\right) \circ \tilde{h}_{t}+z_{t} \circ h_{t-1} \tag{2.0}\)</span></p>
+<p>在循环模型的每个时间步，网络从输入序列中取出<span class="math inline">\(x_{t}\)</span>，并且从先前时间步的输出序列中取出<span class="math inline">\(y_{t}\)</span>，然后更新隐藏态<span class="math inline">\(h_{t}\)</span>作为之前隐藏态<span class="math inline">\(h_{t-1}\)</span>以及<span class="math inline">\((x_{t},y_{t})\)</span>对的函数。然后计算一个以前面元素为先验条件的下一个元素的概率分布。通过在隐藏状态之上添加softmax层来生成离散输出。输出序列<span class="math inline">\(Y\)</span>由生成器通过一个根据分布<span class="math inline">\(P_{\theta_{g}}(y \mid x)\)</span>的输入序列<span class="math inline">\(X\)</span>生成。</p>
+<p>添加一个总结函数<span class="math inline">\(B\left(x, y, \theta_{g}\right)\)</span>在生成器和输入嵌入的隐藏状态之上，并且该函数的输出是鉴别器的输入。</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-6.png"></p>
+<p align="center">
+图1.6 G和D都为RNNs
+</p>
+<p>上图的是一个生成器和鉴别器的结构都使用RNNs的GANs。<span class="math inline">\(H\)</span>代表隐藏层。G中的<span class="math inline">\(b\)</span>代表在隐藏状态上<span class="math inline">\(B\)</span>的输出。而D中的<span class="math inline">\(b\)</span>代表在<span class="math inline">\(x\)</span>上的<span class="math inline">\(B\)</span>和来自训练的<span class="math inline">\(y\)</span>的输出。</p>
+<h4 id="训练过程">训练过程</h4>
+<p>当生成器的训练损耗低于一个明确的数值时，生成器的训练暂停，鉴别器的训练开始。反之，当鉴别器的训练损耗低于一个明确的值时，鉴别器的训练停止，生成器的训练开始。这一过程不断重复直到一批具有明确数量的时间戳到达。</p>
+<p>在不同的实验背景下，生成器和鉴别器既可以由GRUs组成，也可以由RNNs组成。生成器和鉴别器拥有可比性的大小规模。鉴别器在隐藏层之顶有一个充分连接层，还有一个针对输出概率的sigmoid层。两者都通过<strong>Adam优化</strong>（Adam是一种可以替代传统随机梯度下降过程的一阶优化算法，它能基于训练数据迭代地更新神经网络权重。）以小批次随机梯度下降来训练。这些工作都在TensorFlow下完成。</p>
+<h4 id="具体的实验">具体的实验</h4>
+<h5 id="有关数据集">有关数据集</h5>
+<p>预备的数据集包含2万到3万用来训练的单词，还有5万用来测试的单词。在数据集被分离前句子被随意混杂在一起。模型是单词-标准的模型。在预处理阶段，各种各样的标记被清除。</p>
+<h5 id="超参数调整">超参数调整</h5>
+<p>如果G和D采用的是GRUs或者RNNs，那么这样的组合有4中情况：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">生成器</th>
+<th style="text-align: center;">结构</th>
+<th style="text-align: center;">判别器</th>
+<th style="text-align: center;">结构</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">G</td>
+<td style="text-align: center;">GRUs</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">GRUs</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">G</td>
+<td style="text-align: center;">GRUs</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">RNNs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">G</td>
+<td style="text-align: center;">RNNs</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">RNNs</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">G</td>
+<td style="text-align: center;">RNNs</td>
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">GRUs</td>
+</tr>
+</tbody>
+</table>
+<p>如果加上不同的隐藏层的总层数或者总词汇大小，则类似的组合数会更多。可以从论文的Table1中看到这一结果。</p>
+<p><strong>采用GRUs的结构总体上比采用RNNs的结构要表现得更好，而来自GANs的生成内容总体上比没有对抗训练表现得更好。在大批量的训练数据下，通过GANs方法的生成文本更加结构化。而如果隐藏层数非常少，那么这一现象表现得就不明显了。</strong></p>
+<p>设定循环模型的层数固定为2.，batch size为50，序列长度为30。学习率开始时为0.02，并且以90%的衰减率不断减小。Adam策略决定了合适的学习率。生成器的损耗低于0.5时停止训练，而鉴别器的损耗低于0.3时就停止训练。所有的训练终止于50次epochs后。</p>
+<h5 id="结果">结果</h5>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-7.png"></p>
+<p align="center">
+图1.7
+</p>
+<p>可以看到，有监督生成损失随着迭代次数的不断增加逐渐变小，个人猜测20000次以后趋于0.</p>
+<p><img src="/images/Text_Generation_using_Generative_Adversarial_Training/pic1-8.png"></p>
+<p align="center">
+图1.8 生成器和鉴别器loss随迭代次数增长的变化
+</p>
+<p>这是GANs中生成器和鉴别器随迭代次数增长的变化。可以看到，监督模型的训练接近收敛，不像我之前看到的第一幅图那样曲线呈下坡的样子。 GANs中鉴别器和发生器的损耗曲线由于损耗限幅而不太平滑。</p>
+<h3 id="总结">总结</h3>
+<p>这个项目中生成器和鉴别器都是循环的模型，并且生成器被一个通过监督学习训练过的模型初始化。通过GANs产生的文本具有合理的语法和逻辑性，这比没有对抗训练的情况要表现得好。</p>
+<p>当前的训练集仍然很小对比生成文本来说，并且可以添加更多的超参数，最后，强化学习和WGANs可以被进一步研究以用于生成文本。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2018/01/21/Text-Generation-using-Generative-Adversarial-Training/" data-id="ckjb8vtor0004w8la8w3s6qhb" data-title="论文阅读-对抗训练文本生成" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GANs/" rel="tag">GANs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GRUs/" rel="tag">GRUs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LSTMs/" rel="tag">LSTMs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" rel="tag">零和博弈</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/28/GANS-for-Sequences-of-Discrete-Elements-with-the-Gumbel-softmax-Distribution/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          论文阅读-GANs用于离散序列生成
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/18/skip-gram-model/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Skip-gram模型之训练理解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GANs/">GANs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E6%96%87/">人文</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%A0%E9%87%8F%E8%AE%A1%E7%AE%97/">张量计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法分析</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">C语言</a> <a href="/tags/GANs/" style="font-size: 20px;">GANs</a> <a href="/tags/GRUs/" style="font-size: 10px;">GRUs</a> <a href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" style="font-size: 10px;">Gumbel-softmax分布</a> <a href="/tags/LSTMs/" style="font-size: 10px;">LSTMs</a> <a href="/tags/Q%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Q学习</a> <a href="/tags/echarts/" style="font-size: 10px;">echarts</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/navicat%E8%BD%AF%E4%BB%B6/" style="font-size: 10px;">navicat软件</a> <a href="/tags/pytorch/" style="font-size: 10px;">pytorch</a> <a href="/tags/skip-gram/" style="font-size: 10px;">skip-gram</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">张量操作</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">强化学习</a> <a href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" style="font-size: 10px;">心理学</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">纳什均衡</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 10px;">线性代数</a> <a href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">语言模型</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">零和博弈</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/11/echart-question-all/">echarts使用中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/du-shu-bi-ji-shengming-yiyi/">读书笔记(1)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/mysql-navicat/">mysql服务的安装与navicat连接</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2020 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/links" class="mobile-nav-link">Links</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

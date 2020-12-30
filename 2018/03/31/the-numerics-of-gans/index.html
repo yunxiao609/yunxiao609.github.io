@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>论文阅读-The Numerics of GANs | 筠筱的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="论文标题 The Numerics of GANs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文阅读-The Numerics of GANs">
+<meta property="og:url" content="http://example.com/2018/03/31/the-numerics-of-gans/index.html">
+<meta property="og:site_name" content="筠筱的博客">
+<meta property="og:description" content="论文标题 The Numerics of GANs">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-03-31T05:05:20.000Z">
+<meta property="article:modified_time" content="2020-12-21T05:27:13.330Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="GANs">
+<meta property="article:tag" content="线性代数">
+<meta property="article:tag" content="纳什均衡">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">筠筱的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不被理想束缚的生活</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/links">Links</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-the-numerics-of-gans" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2018/03/31/the-numerics-of-gans/" class="article-date">
+  <time class="dt-published" datetime="2018-03-31T05:05:20.000Z" itemprop="datePublished">2018-03-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/GANs/">GANs</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      论文阅读-The Numerics of GANs
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="论文标题">论文标题</h3>
+<p><strong>The Numerics of GANs</strong></p>
+<a id="more"></a>
+<h3 id="基础知识">基础知识</h3>
+<h4 id="实对称矩阵">实对称矩阵</h4>
+<p>如果一个矩阵是实对称矩阵，那么其所有的特征值是实数。如果它不是实对称矩阵，那么其特征值一般是复数：包含实部（real-part），虚部（imaginary-part）。</p>
+<h4 id="正定矩阵">正定矩阵</h4>
+<ul>
+<li><p>正定矩阵：对于任何非零向量X，都有 $ X^{T}AX &gt; 0 $，则称矩阵A为正定阵。</p></li>
+<li><p>负定矩阵：对于任何非零向量X，都有 $ X^{T}AX &lt; 0 $，则称矩阵A为负定阵。</p></li>
+<li><p>半正定矩阵：对于任何非零向量X，都有 $ X^{T}AX &gt;= 0 $，则称矩阵A为半正定阵。</p></li>
+<li><p>半负定矩阵：对于任何非零向量X，都有 $ X^{T}AX &lt;= 0 $，则称矩阵A为半负定阵。</p></li>
+</ul>
+<h4 id="雅克比矩阵">雅克比矩阵</h4>
+<p>雅可比矩阵类似于单变数函数的导数。 假设 <span class="math inline">\(F: R_{n} \rightarrow R_{m}\)</span>是一个从n维欧氏空间映射到到m维欧氏空间的函数。这个函数由m个实函数组成：<span class="math inline">\(y_{1}\left(x_{1}, \ldots, x_{n}\right), \ldots y_{m}\left(x_{1}, \ldots, x_{n}\right)\)</span> 。这些函数的偏导数(如果存在)可以组成一个m行n列的矩阵，这个矩阵就是所谓的雅可比矩阵： <span class="math display">\[
+{
+\left[\begin{array}{ccc}\frac{\partial y_{1}}{\partial x_{1}} &amp; \cdots &amp; \frac{\partial y_{1}}{\partial x_{n}} \\ \vdots &amp; \ddots &amp; \vdots \\ \frac{\partial y_{m}}{\partial x_{1}} &amp; \cdots &amp; \frac{\partial y_{m}}{\partial x_{n}}\end{array}\right]
+}
+\]</span></p>
+<p>此外，雅克比矩阵的行列式称为雅克比行列式。</p>
+<h4 id="黑塞矩阵">黑塞矩阵</h4>
+<p>黑塞矩阵（Hessian Matrix）与雅克比矩阵的不同之处在于，它是一个多元函数的二阶偏导数构成的方阵。 <span class="math display">\[
+{
+H(f)=\left[\begin{array}{cccc}\frac{\partial^{2} f}{\partial x_{1}^{2}} &amp; \frac{\partial^{2} f}{\partial x_{1} \partial x_{2}} &amp; \cdots &amp; \frac{\partial^{2} f}{\partial x_{1} \partial x_{n}} \\ \frac{\partial^{2} f}{\partial x_{2} \partial x_{1}} &amp; \frac{\partial^{2} f}{\partial x_{2}^{2}} &amp; \cdots &amp; \frac{\partial^{2} f}{\partial x_{2} \partial x_{n}} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \frac{\partial^{2} f}{\partial x_{n} \partial x_{1}} &amp; \frac{\partial^{2} f}{\partial x_{n} \partial x_{2}} &amp; \cdots &amp; \frac{\partial^{2} f}{\partial x_{n}^{2}}\end{array}\right]
+}
+\]</span></p>
+<p>通用计算公式： <span class="math display">\[
+{
+H_{i, j}=\frac{\partial^{2} f}{\partial x_{i} \partial x_{j}} \tag{1.1}
+}
+\]</span></p>
+<p>i和j分别表示行数和列数（均从1开始计数）。</p>
+<h4 id="纳什均衡">纳什均衡</h4>
+<p>假设有n个局中人参与博弈，如果某情况下无一参与者可以独自行动而增加收益（即为了自身利益的最大化，没有任何单独的一方愿意改变其策略），则此策略组合被称为纳什均衡。</p>
+<p>这篇论文中，作者分析了训练GAN的普通算法的数值。通过使用平滑双人游戏的方式，分析了GAN训练对象的关联梯度向量场。当前算法的收敛性受到两个因素的影响：i）具有零实部的梯度矢量场的雅可比矩阵的特征值的存在，以及ii）具有大的虚部的特征值。 利用这些发现，作者设计了一种克服了这些局限性并具有更好收敛特性的新算法。 通过实验，证明了其在训练普通GAN的结构的优越性并且展示了难以训练的GAN结构的收敛性。</p>
+<h3 id="简介">简介</h3>
+<p>GAN自从被提出以后已经成功地应用于各种领域任务，包括图像到图像的翻译，图像超分辨率，图像绘画域适应，概率推理等等。尽管如此，GAN还是普遍认为难以被训练。标准的策略使训练稳定的方法是仔细设计模型，要不就是改变结构，要不就是选择一个容易优化的函数。</p>
+<p>作者从理论上证明，阻止算法收敛的主要因素是相关梯度矢量场的雅可比阵特征值的存在性，其中零实部和大的虚部的特征值。作者设计了一种克服这些问题的新算法。</p>
+<h3 id="背景">背景</h3>
+<h4 id="散度方法和gans">散度方法和GANS</h4>
+<p>给出一个函数D，其输入是一对概率分布，其输出是一个大于等于0的元素。并且对于所有的分布p，满足<span class="math inline">\(D(p,p)=0\)</span>。</p>
+<p>假定给出一个目标概率分布 <span class="math inline">\(p_{0}\)</span>，一个分布 <span class="math inline">\(q_{θ}\)</span>（实际上被应用于一个神经网络，这个网络作用于一个取样自已知分布的的隐代码z，网络的输出是一个来自目标空间的元素）。我们的目标是：</p>
+<p><span class="math display">\[
+{
+\min _{\theta} D\left(p_{0}, q_{\theta}\right)
+}
+\]</span> 大部分实际应用的散度被表达成如下的式子：</p>
+<p><span class="math display">\[
+{
+D(p, q)=\max _{f \in F} E_{x \sim q}\left[g_{1}(f(x))\right]-E_{x \sim p}\left[g_{2}(f(x))\right] \tag{1.2}
+}
+\]</span> 结合公式（1.2）和（1.3），最终得到最小最大化问题：</p>
+<p><span class="math display">\[
+{
+\min _{\theta} \max _{f \in F} E_{x \sim q_{\theta}}\left[g_{1}(f(x))\right]-E_{x \sim p_{0}}\left[g_{2}(f(x))\right] \tag{1.3}
+}
+\]</span> 函数类F近似于一个参数系列的函数，由一个神经网络参数化。</p>
+<h4 id="平滑二玩家游戏">平滑二玩家游戏</h4>
+<p>一个可微分的二类游戏由两个效用函数<span class="math inline">\(f(φ,θ)\)</span>和<span class="math inline">\(g(φ,θ)\)</span>定义，基于一个普通空间 <span class="math display">\[
+{
+(\varphi, \theta) \in \Omega_{1} \times \Omega_{2}
+}
+\]</span> 其中，Ω1对应玩家1的可能性动作，在GAN中是生成器的可能参数集。玩家1的目标是最大化函数f。Ω2对应玩家2的可能性动作，在GAN中是判别器的可能参数集，玩家2的目标是最大化函数g。当<span class="math inline">\(f + g=0\)</span>的时候，这就是一个零和游戏的状态。</p>
+<p>我们的目标是找到这个游戏的一个纳什均衡点，即 <span class="math display">\[
+{
+\bar{x}=(\bar{\varphi}, \bar{\theta}) \tag{1.4}
+}
+\]</span></p>
+<p><span class="math display">\[
+{
+\bar{\varphi} \in \underset{\varphi}{\arg \max } f(\varphi, \bar{\theta})
+}
+\]</span></p>
+<p><span class="math display">\[
+{
+\bar{\theta} \in \underset{\theta}{\arg \max } g(\bar{\varphi}, \theta)
+}
+\]</span></p>
+<p>定义一个向量场：</p>
+<p><span class="math display">\[
+{
+v(\phi, \theta)=\left(\begin{array}{c}\nabla_{\phi} f(\phi, \theta) \\ \nabla_{\theta} g(\phi, \theta)\end{array}\right) \tag{1.5}
+}
+\]</span> 在零和游戏的情况下再对其求导：</p>
+<p><span class="math display">\[
+{
+v^{\prime}(\phi, \theta)=\left(\begin{array}{cc}\nabla_{\phi}^{2} f(\phi, \theta) &amp; \nabla_{\phi, \theta} f(\phi, \theta) \\ -\nabla_{\phi, \theta} f(\phi, \theta) &amp; -\nabla_{\theta}^{2} f(\phi, \theta)\end{array}\right) \tag{1.6}
+}
+\]</span></p>
+<h4 id="同时梯度下降">同时梯度下降</h4>
+<p>该算法迭代更新两个玩家的参数，同时对两个玩家的效用函数应用梯度上升。</p>
+<p>如果两个参与者的黑塞矩阵都是负定的，并且学习率足够小，那么同时梯度上升就会局部收敛到零和博弈的纳什均衡。</p>
+<h3 id="收敛性理论">收敛性理论</h3>
+<p>这一节分析了最常用的训练GANs同时梯度上升方法的收敛性。证明这个算法的两个主要失效原因是具有零实部的相关梯度矢量场的雅可比阵的特征值以及具有大的虚部的特征值。</p>
+<h4 id="proposition-3">Proposition 3</h4>
+<p><span class="math inline">\(\Omega \in \mathbb{R}^{n}\)</span> ，函数F： <span class="math inline">\(\Omega \rightarrow \Omega\)</span>是一个连续的可微函数，<span class="math inline">\(\bar{x}\in \Omega\)</span></p>
+<p>1：<span class="math inline">\(F(\bar{x}) = \bar{x} \tag{1.7}\)</span></p>
+<p>2：雅克比矩阵<span class="math inline">\(F^{&#39;}(\bar{x})\)</span>的所有特征值的绝对值均小于1</p>
+<p>设<span class="math inline">\(\bar{x}\)</span>的某一领域为<span class="math inline">\(U\)</span>，<span class="math inline">\(x_{0} \in U\)</span>，<span class="math inline">\(F^{(k)}(x_{0})\)</span>收敛于<span class="math inline">\(\bar{x}\)</span></p>
+<p>误差<span class="math inline">\(\left\|F^{(k)}\left(x_{0}\right)-\bar{x}\right\|\)</span>在<span class="math inline">\(\mathcal{O}\left(\left|\lambda_{\max }\right|^{k}\right)\)</span>内，<span class="math inline">\(k\rightarrow \infty\)</span> ，并且<span class="math inline">\(\lambda_{\max }\)</span> 为<span class="math inline">\(F^{&#39;}(\bar{x})\)</span>所有特征值的绝对值的最大值。</p>
+<p>考虑以下函数形式： <span class="math display">\[
+{
+F(x)=x+hG(x) \tag{1.8}
+}
+\]</span> 求导： <span class="math display">\[
+{
+F^{&#39;}(x)=I+hG^{&#39;}(x) \tag{1.9}
+}
+\]</span> <span class="math inline">\(F^{&#39;}(x)\)</span>和<span class="math inline">\(G^{&#39;}(x)\)</span>都不是对称的，故它们有复杂的特征值。</p>
+<h4 id="lemma-4">Lemma 4</h4>
+<p>矩阵A的特征值拥有负实部，并且让<span class="math inline">\(h&gt;0\)</span> <span class="math display">\[
+{
+h&lt;\frac{1}{|\Re(\lambda)|} \frac{2}{1+\left(\frac{\Im(\lambda)}{\Re(\lambda)}\right)^{2}}
+} \tag{2.0}
+\]</span> 上式表明有两个主要因子影响了h的最大可能值，即：</p>
+<p>（1）<span class="math inline">\(\Re(\lambda)\)</span>的最大值</p>
+<p>（2）<span class="math inline">\(|\Im(\lambda) / \Re(\lambda)|\)</span>的最大值q</p>
+<h3 id="一致性优化">一致性优化</h3>
+<h4 id="derivation">Derivation</h4>
+<p>寻找向量场<span class="math inline">\(v(x)\)</span>的稳定点等同于解方程 <span class="math display">\[
+{
+v(x)=0 \tag{2.1}
+}
+\]</span> 在二类游戏的内容里意味着解一对方程 <span class="math display">\[
+{
+\nabla_{\phi} f(\phi, \theta)=0 \tag{2.2}
+}
+\]</span></p>
+<p><span class="math display">\[
+{
+\nabla_{\theta} g(\phi, \theta)=0 \tag{2.3}
+}
+\]</span></p>
+<p>寻找类似稳定点的一个简单策略是最小化 <span class="math display">\[
+{
+L(x)=\frac{1}{2}\|v(x)\|^{2} \tag{2.4}
+}
+\]</span> 但这可能会导致局部最小值。</p>
+<p>现考虑一个修改过的向量场<span class="math inline">\(w(x)\)</span>，它尽可能接近原始向量场<span class="math inline">\(v(x)\)</span>，即 <span class="math display">\[
+{
+w(x)=v(x)-\gamma \nabla L(x) \tag{2.5}
+}
+\]</span></p>
+<p><span class="math display">\[
+{
+\nabla L(x)=v^{\prime}(x)^{\mathrm{T}} v(x) \tag{2.6}
+}
+\]</span></p>
+<p>该向量场是由两个修改的效用函数给出的修改的双人游戏相关联的梯度向量场 <span class="math display">\[
+{
+\tilde{f}(\phi, \theta)=f(\phi, \theta)-\gamma L(\phi, \theta) \tag{2.7}
+}
+\]</span></p>
+<p><span class="math display">\[
+{
+\tilde{g}(\phi, \theta)=g(\phi, \theta)-\gamma L(\phi, \theta) \tag{2.8}
+}
+\]</span></p>
+<p>其中正则化项<span class="math inline">\(L(\phi, \theta)\)</span>鼓励两个玩家达成一致，因此称之为Consensus Optimization。</p>
+<h4 id="convergence">Convergence</h4>
+<p>考虑一个迭代使用函数F的算法 <span class="math display">\[
+{
+F(x)=x+hA(x)v(x) \tag{2.9}
+}
+\]</span> 其中<span class="math inline">\(h&gt;0\)</span>，<span class="math inline">\(A(x)\)</span>是可逆矩阵。</p>
+<p>Consensus优化是该算法在 <span class="math display">\[
+{
+A(x)=I-\gamma v^{\prime}(x)^{\top} \tag{3.0}
+}
+\]</span> 的特殊情形。假定 <span class="math inline">\(\frac{1}{\gamma}\)</span>不是 的特征值，所以<span class="math inline">\(A(x)\)</span>是可逆的。</p>
+<h5 id="lemma-6">Lemma 6</h5>
+<p>假定<span class="math inline">\(h&gt;0\)</span>且<span class="math inline">\(A(x)\)</span>是可逆阵，<span class="math inline">\(\bar{x}\)</span>是固定点，并且他是<span class="math inline">\(v\)</span>的稳定点，我们有 <span class="math display">\[
+{
+F^{\prime}(\bar{x})=I+h A(\bar{x}) v^{\prime}(\bar{x}) \tag{3.1}
+}
+\]</span></p>
+<h5 id="lemma-7">Lemma 7</h5>
+<p>设 <span class="math display">\[
+{
+A(x)=I-\gamma v^{\prime}(x)^{\top} \tag{3.2}
+}
+\]</span> 并假定<span class="math inline">\(v^{\prime}(\bar{x})\)</span>是半负定且可逆的，所以<span class="math inline">\(A(\bar{x}) v^{\prime}(\bar{x})\)</span>是负定的。</p>
+<h5 id="lemma-9">Lemma 9</h5>
+<p>假定<span class="math inline">\(A\in \mathbb{R}^{n*n}\)</span>是半负定阵，<span class="math inline">\(q(\gamma )\)</span> 是 <span class="math inline">\(\frac{|\mathfrak{G}(\lambda)|}{|\Re(\lambda)|}\)</span>的最大值。</p>
+<p><span class="math inline">\(\lambda\)</span>表示<span class="math inline">\(A-\lambda A^{T}A\)</span>的特征值，<span class="math inline">\(\Re(\lambda)\)</span>和<span class="math inline">\(\mathfrak{G}(\lambda)\)</span>分别表示特征值<span class="math inline">\(\lambda\)</span>的实部与虚部。此外，假定A是可逆的，有<span class="math inline">\(|Av|&gt;=p|v|\)</span>，此时<span class="math inline">\(p&gt;0\)</span></p>
+<p>令 <span class="math display">\[
+{
+c=\min _{v \in \mathbb{S}\left(\mathbb{C}^{n}\right)} \frac{\left|\bar{v}^{\top}\left(A+A^{\top}\right) v\right|}{\left|\bar{v}^{\top}\left(A-A^{\top}\right) v\right|} \tag{3.3}
+}
+\]</span> <span class="math inline">\(S(C^{n})\)</span>表示在<span class="math inline">\(C^{n}\)</span>中的单位球体，然后有： <span class="math display">\[
+{
+q(\gamma) \leq \frac{1}{c+2 \rho^{2} \gamma} \tag{3.4}
+}
+\]</span></p>
+<h3 id="实验">实验</h3>
+<h4 id="介绍">介绍</h4>
+<p>第一个实验通过一个简单的二维实例来评估我们的方法，其中目标是学习8个标准差等于10的-2次方的高斯混合物。但即使在这样简单的示例中，训练GAN的算法也往往无法收敛，由于没有对体系结构和超参数进行微调。</p>
+<p>对于生成器和评论家，两者都使用具有4个隐藏层的全连接神经网络，并且每层有16个隐藏单元。 对于所有的层，使用RELU非线性激活函数。对隐变量z使用16维高斯先验，并使用一个效用函数来设置生成器和评论者之间的游戏。为了测试方法，运行SimGA和RMSProp，一共是20000步，学习率为10的-4次方。 对于我们的方法，使用γ= 10的正则化参数。</p>
+<p>对SimGA方法和我们的方法进行0, 5000, 10000和20000次迭代的结果，虽然SimGA跳过分布模式并且未能收敛，但我们的方法平滑地收敛到目标分布。</p>
+<p>实验结果还显示了<span class="math inline">\(v(x)\)</span>的雅可比行列式和正则化向量场<span class="math inline">\(w(x)\)</span>的特征值的经验分布，其中 <span class="math display">\[
+{
+w(x)=v(x)-\gamma \nabla L(x) \tag{3.5}
+}
+\]</span> 在纳什均衡附近，大多数特征值确实非常接近虚轴，并且在一致优化中使用的向量场的所提出的修改将特征值向左移动。</p>
+<h4 id="数据集">数据集</h4>
+<p>在第二个实验中，将我们的方法应用于cifar-10和celebAdatasets，在发生器或鉴别器中没有批量归一化的情况下使用类似DC-GAN的架构。 对于celebA，另外在每一层中使用恒定数量的<strong>滤波器</strong>并添加额外的RESNET层，与使用交替梯度上升不同，在训练期间，发生器和鉴别器损失几乎保持不变。</p>
+<h4 id="讨论">讨论</h4>
+<p>在讨论中，作者认为之前的分析不能解释为什么训练期间发生器和鉴别器损失几乎保持不变。另外在实践中，如果正则化参数选择为高，提出的方法可能使梯度矢量场的以前不稳定的稳定点稳定。作者还发现，提出的方法对于更深的体系结构变得不太稳定，作者认为这种体系结构中梯度可能具有非常不同的尺度，所以第4节中的简单L2惩罚需要相应地重新调整。提出的方法可以认为是对隐式欧拉方法的积分梯度向量场的近似，还可以看作是二阶方法。</p>
+<h4 id="相关工作">相关工作</h4>
+<p><strong>鞍点问题</strong>不仅出现在训练GAN的情况下。在强化学习中流行的行动者 - 评论者模型也是鞍点问题的特例。</p>
+<p>寻找稳定的GAN训练算法是一个长期存在的问题，并提出了多种解决方案。展开的GAN展开关于评论家的优化，从而为生成器提供更多信息性梯度。尽管展示优化被证明可以稳定训练，但实施起来可能很麻烦，并且还会产生一个很大的模型。所以工作重点是稳定各种架构和发散功能的训练。</p>
+<h3 id="总结">总结</h3>
+<p>从GAN目标函数出发，作者分析了在平滑双人游戏中寻找局部纳什均衡的主要难点。作者确定了当前最先进的算法中出现的主要数值问题，提出了一种用于训练生成对抗网络的新算法。</p>
+<p>这个新算法在理论和实践上具有良好的性质：从理论的角度来看，即使雅可比矩阵的特征值存在问题，也能证明它是局部收敛于纳什均衡的。从实践的角度来看，新算法可以与任何GAN架构结合使用，其目标可以被定义为双人游戏以稳定训练。</p>
+<p>最后作者通过实验证明了新算法能够稳定训练并成功地解决了<strong>模型崩溃</strong>等训练问题。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2018/03/31/the-numerics-of-gans/" data-id="ckjb8vtpd000qw8la2suw63a8" data-title="论文阅读-The Numerics of GANs" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GANs/" rel="tag">GANs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" rel="tag">纳什均衡</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/30/c-yu-yan-shi-xian-mou-pao-pai-xu/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          C语言实现排序算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/28/GANS-for-Sequences-of-Discrete-Elements-with-the-Gumbel-softmax-Distribution/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">论文阅读-GANs用于离散序列生成</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GANs/">GANs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E6%96%87/">人文</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%A0%E9%87%8F%E8%AE%A1%E7%AE%97/">张量计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法分析</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">C语言</a> <a href="/tags/GANs/" style="font-size: 20px;">GANs</a> <a href="/tags/GRUs/" style="font-size: 10px;">GRUs</a> <a href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" style="font-size: 10px;">Gumbel-softmax分布</a> <a href="/tags/LSTMs/" style="font-size: 10px;">LSTMs</a> <a href="/tags/Q%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Q学习</a> <a href="/tags/echarts/" style="font-size: 10px;">echarts</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/navicat%E8%BD%AF%E4%BB%B6/" style="font-size: 10px;">navicat软件</a> <a href="/tags/pytorch/" style="font-size: 10px;">pytorch</a> <a href="/tags/skip-gram/" style="font-size: 10px;">skip-gram</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">张量操作</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">强化学习</a> <a href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" style="font-size: 10px;">心理学</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">纳什均衡</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 10px;">线性代数</a> <a href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">语言模型</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">零和博弈</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/11/echart-question-all/">echarts使用中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/du-shu-bi-ji-shengming-yiyi/">读书笔记(1)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/mysql-navicat/">mysql服务的安装与navicat连接</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2020 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/links" class="mobile-nav-link">Links</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

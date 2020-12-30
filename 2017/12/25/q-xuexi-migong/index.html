@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Q学习算法探究及迷宫应用 | 筠筱的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="摘要： 强化学习是一种不同于监督学习和无监督学习的学习技术，它将学习看成一个试探评估的过程。一般来说，一个智能体感知环境状态，并且采取某个action作用于环境，环境接受到这个action后再给出一个reward反馈给学习系统，智能体根据reward再判断下一个动作，如此进行下去。 Q-learning是强化学习的主要算法，它属于无模型的学习算法。它在博弈论，围棋，国际象棋等方面应用较广。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Q学习算法探究及迷宫应用">
+<meta property="og:url" content="http://example.com/2017/12/25/q-xuexi-migong/index.html">
+<meta property="og:site_name" content="筠筱的博客">
+<meta property="og:description" content="摘要： 强化学习是一种不同于监督学习和无监督学习的学习技术，它将学习看成一个试探评估的过程。一般来说，一个智能体感知环境状态，并且采取某个action作用于环境，环境接受到这个action后再给出一个reward反馈给学习系统，智能体根据reward再判断下一个动作，如此进行下去。 Q-learning是强化学习的主要算法，它属于无模型的学习算法。它在博弈论，围棋，国际象棋等方面应用较广。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_1.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_2.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_3.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_4.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_5.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_6.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_7.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_8.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_9.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_11.png">
+<meta property="og:image" content="http://example.com/images/Q_learning/pic2_13.png">
+<meta property="article:published_time" content="2017-12-25T09:13:09.000Z">
+<meta property="article:modified_time" content="2020-12-24T01:33:39.837Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="强化学习">
+<meta property="article:tag" content="Q学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Q_learning/pic2_1.png">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">筠筱的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">不被理想束缚的生活</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/links">Links</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-q-xuexi-migong" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2017/12/25/q-xuexi-migong/" class="article-date">
+  <time class="dt-published" datetime="2017-12-25T09:13:09.000Z" itemprop="datePublished">2017-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Q学习算法探究及迷宫应用
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="摘要"><strong>摘要：</strong></h3>
+<p>强化学习是一种不同于监督学习和无监督学习的学习技术，它将学习看成一个试探评估的过程。一般来说，一个智能体感知环境状态，并且采取某个action作用于环境，环境接受到这个action后再给出一个reward反馈给学习系统，智能体根据reward再判断下一个动作，如此进行下去。</p>
+<p>Q-learning是强化学习的主要算法，它属于无模型的学习算法。它在博弈论，围棋，国际象棋等方面应用较广。</p>
+<p>本文将首先介绍Q-learning算法的具体步骤，最后通过一个绵羊走迷宫的小例子来更直观地理解该算法,并且给出实现的代码。</p>
+<p><strong>关键词：</strong> 强化学习； 无监督学习； Q-learning； 走迷宫</p>
+<a id="more"></a>
+<h4 id="q-learning算法介绍"><strong>1. Q-learning算法介绍</strong></h4>
+<p>强化学习领域一个最重要的突破就是一种叫做Q-learning的off-policy TD控制方法（SARSA方法是on-policy TD控制方法），它是由Watkins于1989年提出。它的最简单的形式，例如单步的Q-learning，被定义为如下：</p>
+<p><span class="math inline">\(Q\left(S_{t}, A_{t}\right) \leftarrow Q\left(S_{t}, A_{i}\right)+\alpha\left[R_{t+1}+\gamma \max_{a} Q\left(S_{t+1}, a\right)-Q\left(S_{t}, A_{t}\right)\right] \tag{1.1}\)</span></p>
+<p>有的时候也被简写为(本篇后面的例子以这个公式为准)：</p>
+<p><span class="math inline">\(Q(s, a)=R(s, a)+\gamma \max _{a^{\prime}}\left\lbrace Q\left(s^{\prime}, a^{\prime} \right)\right \rbrace \tag{1.2}\)</span></p>
+<p>Q-Learning算法下，目标是达到目标状态(Goal State)并获取最高收益，一旦到达目标状态，最终收益保持不变。因此，目标状态又称之为吸收态。</p>
+<p>Q-Learning算法下的agent，不知道整体的环境，知道当前状态下可以选择哪些动作。</p>
+<p>通常，我们需要构建一个即时奖励矩阵<em>R</em>，用于表示从状态<em>s</em>到下一个状态<em>s’</em></p>
+<p>的动作奖励值。由即时奖励矩阵<em>R</em>计算得出指导agent行动的<em>Q</em>矩阵。Q矩阵是agent的大脑。</p>
+<p>初始时，Q矩阵元素全部初始化为0，表示当前的agent大脑一片空白，什么也不知道。具体算法步骤见下文：</p>
+<p>任意初始化 <span class="math inline">\(Q(s,a)\)</span></p>
+<p><strong><em>Repeat</em></strong>（对每个情节）：</p>
+<p style="text-indent:4em">
+初始化 <em>s</em>
+</p>
+<p style="text-indent:4em">
+<strong><em>Repeat</em></strong>（对情节的每一步）：
+</p>
+<p style="text-indent:6em">
+用源自<em>Q</em>中的策略（例如<span class="math inline">\(\varepsilon\)</span> -greedy）在<em>s</em>中选择 <em>a</em>
+</p>
+​
+<p style="text-indent:6em">
+采用动作 <em>a</em>，观察<em>r</em>，<em>s’</em>
+</p>
+<p style="text-indent:6em">
+<span class="math inline">\(Q(s, a)=R(s, a)+\gamma \max \lbrace Q(s^{\prime}, a^{\prime})\rbrace\)</span>
+</p>
+​
+<p style="text-indent:4em">
+<span class="math inline">\(s \leftarrow s^{\prime}\)</span>
+</p>
+<p><strong><em>Until</em></strong> <em>s</em>是终止状态</p>
+<h5 id="具体步骤">具体步骤：</h5>
+<ol type="1">
+<li>初始化Q-table矩阵</li>
+<li>选择起始状态<em>s</em></li>
+<li>选择当前状态<em>s</em>下的一个可能动作<em>a</em></li>
+<li>选择动作<em>a​</em>后转移到下一个状态<em>s'</em></li>
+<li>使用Bellman Equation（贝尔曼方程），更新Q-table</li>
+<li>将下一个状态作为当前state，直到达到目标状态，一个episode结束</li>
+<li>迭代尽可能无限多次episode，就可以得到最终收敛的Q矩阵了。</li>
+</ol>
+<p>Q-learning的核心是Q-table。Q-table的行和列分别表示state和action的值，Q-table的值 <span class="math inline">\(Q(s,a)\)</span>衡量当前state采取action到底有多好。</p>
+<h4 id="绵羊走迷宫"><strong>2. 绵羊走迷宫</strong></h4>
+<h5 id="初始条件"><strong>2.1 初始条件</strong></h5>
+<p>这个例子描述了一个利用无监督训练学习未知环境的agent。现在假设一个迷宫有5个房间，房间之间通过门相连，将这五个房间按照从0至4进行编号，且迷宫的外围是一个大的房间（里面是草地），编号为5。因绵羊要吃草，设定5号房间为绵羊的目标房间。房间结构如下：</p>
+<p><img src="/images/Q_learning/pic2_1.png"></p>
+<p align="center">
+图2.1 房间结构​
+</p>
+<p>现在通过一个图来表示，用房间来表示节点，如果两个房间有门相连，那么两个节点之间对应一条边。如下图所示。</p>
+<p><img src="/images/Q_learning/pic2_2.png"></p>
+<p align="center">
+图2.2 用直观图表示房间结构
+</p>
+<p>接下来先将绵羊放在迷宫中的任意一个房间，然后从该房间开始走到目标房间（即5号房间）。接着为每一扇门（即对应的边）设定一个奖赏（reward）值。直接连接到5号房间的奖赏值为100，其他门的奖赏值为0。然后我们可以在每个箭头上表注权重，这个权重就是奖赏值。</p>
+<p>值得留意的是5号房间有一个指向其本身的箭头，奖赏值为100，其他所有指向5号房间的奖赏值也为100。我们这个例子的目标是使绵羊达到奖赏值最大的状态，故而绵羊到达5号房间后将一直停在那里。</p>
+<p>在这个例子中，我们将一个房间对应于一种<strong>状态</strong>，将绵羊从一个房间走到另外一个房间，即从一个状态达到另外一个状态称为一个<strong>行为。</strong></p>
+<p>比如绵羊现在处于状态2，它可以转到状态0，但是不能转到状态1。</p>
+<p>因此，同样地，我们有：</p>
+<p>从状态0，只能转到状态4；从状态1，可以转到状态3或者状态5；从状态3，可以转到状态1和4，也可以转到状态2；从状态4，可以转到状态0,5或者3。</p>
+<p>上面的内容都是这个实例的初始条件以及需要做的一些简要工作。接下来就是要将Q-learning算法应用于这个实例，我们将一步一步迭代几个episode。</p>
+<h5 id="算法应用"><strong>2.2 算法应用</strong></h5>
+<p>先令学习参数 <span class="math inline">\(γ = 0.8\)</span>，初始state为1号房间，如何将Q初始化为一个零矩阵。</p>
+<p><img src="/images/Q_learning/pic2_3.png"></p>
+<p align="center">
+图2.3 初始化Q为一个零矩阵
+</p>
+<p><img src="/images/Q_learning/pic2_4.png"></p>
+<p align="center">
+图2.4 奖赏矩阵
+</p>
+<p>注意到矩阵R的第二行（state1），它有两个非负值，也就是说，状态1的下一步动作有两种选择：转向状态3或者状态5。此时我们选择状态5。假象绵羊位于状态5以后，观察R的第六行，它有三种可能的行为选择：转向状态1或4或5。由第一节的公式：</p>
+<p><span class="math inline">\(Q(1,5)=R(1,5)+0.8 * \max \lbrace Q(5,1), Q(5,4), Q(5,5) \rbrace = 100 \tag{1.3}\)</span></p>
+<p>现在状态5变成了当前状态，而且达到了目标状态，完成了一次episode，矩阵Q也相应地更新了！</p>
+<p><img src="/images/Q_learning/pic2_5.png"></p>
+<p align="center">
+图2.5 一次episode后的Q
+</p>
+<p>接下来选取3为初始状态，它有转向1或2或4的三种动作选择。我们随机地选择转向状态1。而状态1有可能转向状态3或者5。由第一节公式：</p>
+<p><span class="math inline">\(Q(3,1)=R(3,1)+0.8 * \max \lbrace Q(1,3), Q(1,5)\rbrace =80 \tag{1.4}\)</span></p>
+<p>同样地，刷新Q(3,1)。</p>
+<p><img src="/images/Q_learning/pic2_6.png"></p>
+<p align="center">
+图2.6 刷新 Q(1,3)
+</p>
+<p>由于状态1还不是目标状态，因此第二次episode还没有结束。现在在状态1，有两种动作选择：转向3或5。假定我们运气好，选择了状态5。由前面的分析，我们有：<span class="math inline">\(Q(1,5) = 100\)</span>。刷新矩阵Q，但是Q没有发生变化。第二次episode结束啦！</p>
+<p>基于我们分析的两个episode过程的经验，还可以继续执行更多的episode。最终Q将收敛成如下一个矩阵：</p>
+<p><img src="/images/Q_learning/pic2_7.png"></p>
+<p align="center">
+图2.7 最终的Q
+</p>
+<p>最后对Q进行规范化，每个非零元素除以Q中最大的元素（这里省略了百分号）。</p>
+<p><img src="/images/Q_learning/pic2_8.png"></p>
+<p align="center">
+图2.8 规范化后的Q
+</p>
+<p>我们可以更改箭头的权重得到我们最终想要的图了：</p>
+<p><img src="/images/Q_learning/pic2_9.png"></p>
+<p align="center">
+图2.9 最终得到的路径图
+</p>
+<p>如果以3号房间为初始状态，根据Q表，reward最大的路径是3-﹥1-﹥5或者3-﹥4-﹥5，总的reward都为100。</p>
+<p>总结一下，这个例子是Q-learning算法的简单应用。事实上，实际中的情况要更加复杂，例如可能是两个，三个甚至多个绵羊。本例中我们简化了奖赏矩阵R，实际上那些奖赏设为0的奖赏可以为其他大于0的数，为了方便计算，故而将它们设为0。</p>
+<h5 id="代码实现"><strong>2.3 代码实现</strong></h5>
+<p><strong>2.3.1 首先训练数据</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 学习率</span></span><br><span class="line">rate = <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化Q矩阵为零矩阵并初始化奖赏矩阵R</span></span><br><span class="line">q = np.zeros((<span class="number">6</span>, <span class="number">6</span>))</span><br><span class="line">q = np.matrix(q)</span><br><span class="line"></span><br><span class="line">r = np.array([[-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>], [-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">100</span>], </span><br><span class="line">				[-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>, -<span class="number">1</span>], [-<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>], </span><br><span class="line">				[<span class="number">0</span>, -<span class="number">1</span>, -<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">100</span>], [-<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">100</span>]])</span><br><span class="line">r = np.matrix(r)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">	<span class="comment"># 随机选取一个初始状态</span></span><br><span class="line">	state = random.randint(<span class="number">0</span>, <span class="number">5</span>)</span><br><span class="line">	<span class="comment"># state不能为目标状态</span></span><br><span class="line">	<span class="keyword">while</span> state != <span class="number">5</span>:</span><br><span class="line">		<span class="comment"># 选取r表中第state行非负的值</span></span><br><span class="line">		r_pos_action = []</span><br><span class="line">		<span class="keyword">for</span> action <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>):</span><br><span class="line">            <span class="keyword">if</span> r[state, action] &gt;= <span class="number">0</span>:</span><br><span class="line">		next_state = r_pos_action[random.randint(<span class="number">0</span>, <span class="built_in">len</span>(r_pos_action)-<span class="number">1</span>)]</span><br><span class="line">		q[state, next_state] = r[state, next_state] + rate*q[next_state].<span class="built_in">max</span>()</span><br><span class="line">		state = next_state</span><br><span class="line"></span><br><span class="line">print(q)</span><br></pre></td></tr></table></figure>
+<p><strong>下图是训练好的<em>Q</em>表（最终<em>Q</em>表收敛）</strong></p>
+<p><img src="/images/Q_learning/pic2_11.png"></p>
+<p align="center">
+图2.10
+</p>
+<p><strong>2.3.2 再根据<em>Q</em>表进行路径选择</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">	print(<span class="string">&quot;第&#123;&#125;次验证&quot;</span>.<span class="built_in">format</span>(i + <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">	state = random.randint(<span class="number">0</span>, <span class="number">5</span>)</span><br><span class="line">	print(<span class="string">&quot;绵羊处于状态&#123;&#125;&quot;</span>.<span class="built_in">format</span>(state))</span><br><span class="line">	count = <span class="number">0</span></span><br><span class="line">	<span class="keyword">while</span> state != <span class="number">5</span>:</span><br><span class="line">		<span class="keyword">if</span> count &gt; <span class="number">20</span>:</span><br><span class="line">			print(<span class="string">&#x27;fail&#x27;</span>)</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		<span class="comment"># 选择最大的q_max</span></span><br><span class="line">		q_max = q[state].<span class="built_in">max</span>()</span><br><span class="line"></span><br><span class="line">		q_max_action = []</span><br><span class="line">		<span class="keyword">for</span> action <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">6</span>):</span><br><span class="line">			<span class="keyword">if</span> q[state, action] == q_max:</span><br><span class="line">				q_max_action.append(action)</span><br><span class="line"></span><br><span class="line">		next_state = q_max_action[random.randint(<span class="number">0</span>, <span class="built_in">len</span>(q_max_action) - <span class="number">1</span>)]</span><br><span class="line">		print(<span class="string">&quot;the sheep goes to &quot;</span> + <span class="built_in">str</span>(next_state) + <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">		state = next_state</span><br><span class="line">		count += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>2.3.3 选择后的结果</strong></p>
+<p><img src="/images/Q_learning/pic2_13.png"></p>
+<p align="center">
+图2.11
+</p>
+<h4 id="总结与反思"><strong>3. 总结与反思</strong></h4>
+<p>本篇小论文首先简单介绍了Q-learning算法，再通过一个小例子实现了该算法的简单应用。我们通过1000多次训练数据使得Q表收敛，接着再验证我们的训练结果。事实上，Q-learning算法是一种off-policy TD 控制算法，与之相对的是Sarsa算法，一种on-policy TD控制算法，它是基于每一步一个总结，探索时较为“保守”，与之相对的则是Q-learning较为“勇敢”。</p>
+<p>但是，Q-learning也存在着学习时间过长、收敛速度慢的缺陷的特征。但是可以通过从环境中提取特征，借助人的经验和问题的背景知识可以很好的设计启发函数并融入到强化学习中，提高算法的学习效率，加快算法的收敛，可以改进智能体从环境中学习知识的能力，最后再进行仿真验证即可。</p>
+<h4 id="相关应用"><strong>4. 相关应用</strong></h4>
+<p>近年来，该算法应用也较为广泛，主要是基于博弈论方面的，例如：围棋，国际象棋等。比方说，我们可以在上下文老虎机问题中利用Q函数学习过的代理预估长期在特定行为的值。</p>
+<p>Q-Learning算法从90年代被提出至今，它已经历了一系列重大的改进，Q学习可被应用于更加多变的动态场景中。例如与神经网络的结合，Deepmind的深度Q网络的一个主要示例，就是用于学习直接从像素中进行几十种不同的ATARI游戏，像这里仅用一个查找表根本不可能实现的壮举。为了实现这个目标，他们用到了一个由Deep Neural Network(DNN)网络控制的代理。通过神经网络，它可以学习将广义Q函数应用于完全不可见的状态，例如显示器上少见的像素组合。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2017/12/25/q-xuexi-migong/" data-id="ckjb8vtp9000kw8laf553cmem" data-title="Q学习算法探究及迷宫应用" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Q%E5%AD%A6%E4%B9%A0/" rel="tag">Q学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/18/skip-gram-model/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Skip-gram模型之训练理解
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GANs/">GANs</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E6%96%87/">人文</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%A0%E9%87%8F%E8%AE%A1%E7%AE%97/">张量计算</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法分析</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">C语言</a> <a href="/tags/GANs/" style="font-size: 20px;">GANs</a> <a href="/tags/GRUs/" style="font-size: 10px;">GRUs</a> <a href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" style="font-size: 10px;">Gumbel-softmax分布</a> <a href="/tags/LSTMs/" style="font-size: 10px;">LSTMs</a> <a href="/tags/Q%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Q学习</a> <a href="/tags/echarts/" style="font-size: 10px;">echarts</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/navicat%E8%BD%AF%E4%BB%B6/" style="font-size: 10px;">navicat软件</a> <a href="/tags/pytorch/" style="font-size: 10px;">pytorch</a> <a href="/tags/skip-gram/" style="font-size: 10px;">skip-gram</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">张量操作</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">强化学习</a> <a href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" style="font-size: 10px;">心理学</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">纳什均衡</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 10px;">线性代数</a> <a href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">语言模型</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">零和博弈</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/11/echart-question-all/">echarts使用中的跨域问题</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/03/du-shu-bi-ji-shengming-yiyi/">读书笔记(1)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/15/mysql-navicat/">mysql服务的安装与navicat连接</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2020 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/links" class="mobile-nav-link">Links</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
