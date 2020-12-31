@@ -679,13 +679,13 @@ a.article-title:hover {
   line-height: 1em;
   padding: 6px 15px;
   border-radius: 15px;
-  background: #eee;
+  background: #22b8dd;
   color: #999;
   text-shadow: 0 1px #fff;
   text-decoration: none;
 }
 .article-more-link a:hover {
-  background: #258fb8;
+  background: #1a5780;
   color: #fff;
   text-decoration: none;
   text-shadow: 0 1px #1e7293;
