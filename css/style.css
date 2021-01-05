@@ -521,6 +521,9 @@ body {
 .article-date {
   float: left;
 }
+.article-date:before {
+  content: "\f2c3";
+}
 .article-category {
   float: left;
   line-height: 1em;
@@ -529,10 +532,14 @@ body {
   margin-left: 8px;
 }
 .article-category:before {
-  content: "\2022";
+  content: "|";
 }
 .article-category-link {
   margin: 0 12px 1em;
+  color: #40759b;
+}
+.article-category-link:before {
+  content: "\1F4CE";
 }
 .article-header {
   padding: 20px 20px 0;
@@ -721,7 +728,7 @@ a.article-title:hover {
   float: right;
 }
 .article-comment-link:before {
-  content: "\f075";
+  content: "\1F4CE";
   font-family: FontAwesome;
   padding-right: 8px;
 }
@@ -731,7 +738,7 @@ a.article-title:hover {
   margin-left: 20px;
 }
 .article-share-link:before {
-  content: "\f064";
+  content: "\f4ad";
   font-family: FontAwesome;
   padding-right: 6px;
 }
@@ -1307,21 +1314,23 @@ pre .javascript .function {
   border-radius: 3px;
 }
 .widget a {
-  color: #258fb8;
   text-decoration: none;
 }
-.widget a:hover {
+font-weight: bold {
+  color: #1e90ff;
+}
+font-weight: bold:hover {
   text-decoration: underline;
 }
-.widget ul ul,
-.widget ol ul,
-.widget dl ul,
-.widget ul ol,
-.widget ol ol,
-.widget dl ol,
-.widget ul dl,
-.widget ol dl,
-.widget dl dl {
+ul ul,
+ol ul,
+dl ul,
+ul ol,
+ol ol,
+dl ol,
+ul dl,
+ol dl,
+dl dl {
   margin-left: 15px;
   list-style: disc;
 }
