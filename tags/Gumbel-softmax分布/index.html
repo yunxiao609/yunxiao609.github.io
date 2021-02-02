@@ -4,15 +4,10 @@
   <meta charset="utf-8">
   
   
-  <title>Tag: Gumbel-softmax分布 | 筠筱的博客</title>
+  <title>tag: Gumbel-softmax分布 | 筠筱的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="筠筱的博客">
-<meta property="og:url" content="http://example.com/tags/Gumbel-softmax%E5%88%86%E5%B8%83/index.html">
-<meta property="og:site_name" content="筠筱的博客">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="筠筱的博客" type="application/atom+xml">
   
   
     <link rel="shortcut icon" href="/favicon.png">
@@ -30,13 +25,18 @@
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
   
+  
+    
+<link rel="stylesheet" href="/localshare/css/share.css">
+
+  
+  
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body>
   <div id="container">
     <div id="wrap">
       <header id="header">
-  <div id="banner"></div>
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
@@ -50,23 +50,33 @@
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
         
-          <a class="main-nav-link" href="/">主页</a>
+          <a class="main-nav-link" href="/."><i class="fa fa-home"></i> Home</a>
         
-          <a class="main-nav-link" href="/archives">归档</a>
+          <a class="main-nav-link" href="/archives/"><i class="fa fa-archive"></i> Archive</a>
         
-          <a class="main-nav-link" href="/about">关于</a>
+          <a class="main-nav-link" href="/about/"><i class="fa fa-user"></i> About</a>
         
-          <a class="main-nav-link" href="/links">友链</a>
+          <a class="main-nav-link" href="/atom.xml"><i class="fa fa-rss"></i> RSS</a>
         
       </nav>
-      <nav id="sub-nav">
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+    </div>
+    <div id="search-form">
+      <div id="result-mask" class="hide"></div>
+      <label><input id="search-key" type="text" autocomplete="off" placeholder="search"></label>
+      <div id="result-wrap" class="hide">
+        <div id="search-result"></div>
+      </div>
+      <div class="hide">
+        <template id="search-tpl">
+          <div class="item">
+            <a href="/{path}" title="{title}">
+              <div class="title">{title}</div>
+              <div class="time">{date}</div>
+              <div class="tags">{tags}</div>
+            </a>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -74,38 +84,32 @@
 
       <div class="outer">
         <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2018/01/28/GANS-for-Sequences-of-Discrete-Elements-with-the-Gumbel-softmax-Distribution/" class="archive-article-date">
-  <time class="dt-published" datetime="2018-01-28T04:20:10.000Z" itemprop="datePublished">Jan 28</time>
-</a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/01/28/GANS-for-Sequences-of-Discrete-Elements-with-the-Gumbel-softmax-Distribution/">论文阅读-GANs用于离散序列生成</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+    
+    
+    <section class="archives-wrap">
+      <div class="archive-title">
+        
+          <i class="fa fa-tag"></i>
+          Gumbel-softmax分布
+        
+      </div>
+      <div class="archives">
   
+  <ul class="archive-article archive-type-post">
+  <li class="archive-article-inner">
+    <a href="/2018/01/28/GANS-for-Sequences-of-Discrete-Elements-with-the-Gumbel-softmax-Distribution/">
+      <time class="dt-published" datetime="2018-01-28T04:20:10.000Z" itemprop="datePublished">2018年01月28日</time>
+      | <span class="archive-article-title">论文阅读-GANs用于离散序列生成</span>
+    </a>
+  </li>
+</ul>
+
+
+
+  </div></section>
 
 
 </section>
@@ -114,36 +118,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title"><i class="fas fa-paperclip"></i>&nbsp;&nbsp;分类</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GANs/">GANs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E6%96%87/">人文</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%A0%E9%87%8F%E8%AE%A1%E7%AE%97/">张量计算</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法分析</a><span class="category-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title"><i class="fas fa-tags"></i>&nbsp;&nbsp;标签</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/C%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">C语言</a> <a href="/tags/GANs/" style="font-size: 20px;">GANs</a> <a href="/tags/GRUs/" style="font-size: 10px;">GRUs</a> <a href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" style="font-size: 10px;">Gumbel-softmax分布</a> <a href="/tags/LSTMs/" style="font-size: 10px;">LSTMs</a> <a href="/tags/Q%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Q学习</a> <a href="/tags/echarts/" style="font-size: 10px;">echarts</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/navicat%E8%BD%AF%E4%BB%B6/" style="font-size: 10px;">navicat软件</a> <a href="/tags/pytorch/" style="font-size: 10px;">pytorch</a> <a href="/tags/skip-gram/" style="font-size: 10px;">skip-gram</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">张量操作</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">强化学习</a> <a href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" style="font-size: 10px;">心理学</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">纳什均衡</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 10px;">线性代数</a> <a href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">语言模型</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">零和博弈</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title"><i class="far fa-folder-open"></i>&nbsp;&nbsp;归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title"><i class="far fa-edit"></i>&nbsp;&nbsp;最新</h3>
+    <h3 class="widget-title"><i class="fa fa-posts"></i> Recent</h3>
     <div class="widget">
       <ul>
         
@@ -159,40 +134,99 @@
             <a href="/2020/10/15/mysql-navicat/">mysql服务的安装与navicat连接</a>
           </li>
         
+          <li>
+            <a href="/2020/07/30/pytorch_operation/">Pytorch的常用张量操作</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/30/er-cha-shu-de-jian-li-yu-bian-li-c-yu-yan-shi-xian/">二叉树的建立与遍历（C语言实现）</a>
+          </li>
+        
       </ul>
     </div>
   </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title"><i class="fa fa-tag"></i> Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">C语言</a> <a href="/tags/GANs/" style="font-size: 20px;">GANs</a> <a href="/tags/GRUs/" style="font-size: 10px;">GRUs</a> <a href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" style="font-size: 10px;">Gumbel-softmax分布</a> <a href="/tags/LSTMs/" style="font-size: 10px;">LSTMs</a> <a href="/tags/Q%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">Q学习</a> <a href="/tags/echarts/" style="font-size: 10px;">echarts</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/navicat%E8%BD%AF%E4%BB%B6/" style="font-size: 10px;">navicat软件</a> <a href="/tags/pytorch/" style="font-size: 10px;">pytorch</a> <a href="/tags/skip-gram/" style="font-size: 10px;">skip-gram</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" style="font-size: 10px;">张量操作</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">强化学习</a> <a href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" style="font-size: 10px;">心理学</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" style="font-size: 10px;">纳什均衡</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" style="font-size: 10px;">线性代数</a> <a href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">语言模型</a> <a href="/tags/%E8%B7%A8%E5%9F%9F/" style="font-size: 10px;">跨域</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" style="font-size: 10px;">零和博弈</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title"><i class="fa fa-classify"></i> Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GANs/">GANs</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%BA%E6%96%87/">人文</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BC%A0%E9%87%8F%E8%AE%A1%E7%AE%97/">张量计算</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90/">文本生成</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法分析</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title"><i class="fa fa-archive"></i> Archive</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020年12月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018年03月</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017年12月</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title"><i class="fa fa-tag"></i> Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C%E8%AF%AD%E8%A8%80/" rel="tag">C语言</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GANs/" rel="tag">GANs</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GRUs/" rel="tag">GRUs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gumbel-softmax%E5%88%86%E5%B8%83/" rel="tag">Gumbel-softmax分布</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LSTMs/" rel="tag">LSTMs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Q%E5%AD%A6%E4%B9%A0/" rel="tag">Q学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/echarts/" rel="tag">echarts</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/navicat%E8%BD%AF%E4%BB%B6/" rel="tag">navicat软件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytorch/" rel="tag">pytorch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skip-gram/" rel="tag">skip-gram</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%A0%E9%87%8F%E6%93%8D%E4%BD%9C/" rel="tag">张量操作</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" rel="tag">强化学习</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%83%E7%90%86%E5%AD%A6/" rel="tag">心理学</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%B3%E4%BB%80%E5%9D%87%E8%A1%A1/" rel="tag">纳什均衡</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag">线性代数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%B6%E5%92%8C%E5%8D%9A%E5%BC%88/" rel="tag">零和博弈</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
 
   
 </aside>
         
       </div>
+      <a id="totop" href="#top"></a>
       <footer id="footer">
   
   <div class="outer">
-    <div id="footer-info" class="inner" text-align="center">
-      Copyright &copy; 2021 叶飞. All rights reserved.
+    <div id="footer-info" class="inner">
+      <p>
+        <a href="/sitemap.xml">Site Map</a>
+        <span> | </span><a href="/atom.xml">Subscribe to this site</a>
+        <span> | </span><a href="/about/">Contact the blogger</a>
+      </p>
+      
+        <p>
+          <i class="fa fa-visitors"></i>
+          <i id="busuanzi_container_site_uv"><i id="busuanzi_value_site_uv"></i></i>
+          ，
+          <i class="fa fa-views"></i>
+          <i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>
+        </p>
+      
+      <p>
+        <span>Copyright &copy; 2021 John Doe.</span>
+        <span>Theme by <a href="https://github.com/chaooo/hexo-theme-BlueLake/" target="_blank">BlueLake.</a></span>
+        
+            <span>Count by <a href="http://busuanzi.ibruce.info/" target="_blank">busuanzi.</a></span>
+        
+        <span>Powered by <a href="https://hexo.io/" target="_blank">Hexo.</a></span>
+      </p>
     </div>
   </div>
 </footer>
 
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">主页</a>
-  
-    <a href="/archives" class="mobile-nav-link">归档</a>
-  
-    <a href="/about" class="mobile-nav-link">关于</a>
-  
-    <a href="/links" class="mobile-nav-link">友链</a>
-  
-</nav>
     
-
-
 <script src="/js/jquery-3.4.1.min.js"></script>
 
+
+<script src="/js/search.json.js"></script>
 
 
   
@@ -208,9 +242,26 @@
 
 
   
+<script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+  
+<script src="/localshare/js/social-share.js"></script>
+
+  
+<script src="/localshare/js/qrcode.js"></script>
+
+
+
+
+
+
+
+  
 <script src="https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js"></script>
 
-<script>
+  <script>
     var GUEST_INFO = ['nick','mail','link'];
     var guest_info = 'nick,mail,link'.split(',').filter(function(item){
         return GUEST_INFO.indexOf(item) > -1
@@ -221,14 +272,28 @@
         el: '.vcomment',
         notify: notify,
         verify: verify,
-        appId: "2DweflGgmGaECjHfBXXNOlxp-gzGzoHsz",
-        appKey: "XHkgm8ia8oCFMaA8dgPLMf9C",
+        appId: "vLPzzKBu42xSePsXQ9SMFMnu-gzGzoHsz",
+        appKey: "SXT5mro1fOk42Qd9iF4lqApa",
         placeholder: "Just go go",
         pageSize:'10',
         avatar:'mm',
         lang:'zh-cn'
     });
-</script>
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   </div>
 <script type="text/x-mathjax-config">
