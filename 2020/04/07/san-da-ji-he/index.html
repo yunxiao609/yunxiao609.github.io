@@ -11,7 +11,7 @@
 
     <title>
         
-        读书笔记(1) - undefined
+        机器学习训练集和测试集和验证集理解 - undefined
         
     </title>
 
@@ -86,7 +86,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#cox%E6%AF%94%E4%BE%8B%E9%A3%8E%E9%99%A9%E6%A8%A1%E5%9E%8B"><span class="toc-text">COX比例风险模型</span></a></li></ol>
+    
 </div>
     
 </div>
@@ -117,18 +117,15 @@
 
 <div class="post-container">
     <div class="post-title">
-        读书笔记(1)
+        机器学习训练集和测试集和验证集理解
     </div>
 
     <div class="post-meta">
-        <span class="attr">Post：<span>2020-12-03 12:15:50</span></span>
+        <span class="attr">Post：<span>2020-04-07 12:15:50</span></span>
         
         <span class="attr">Tags：/
         
-        <a class="tag" href="/tags/#心理学" title="心理学">心理学</a>
-        <span>/</span>
-        
-        <a class="tag" href="/tags/#随笔" title="随笔">随笔</a>
+        <a class="tag" href="/tags/#分类算法" title="分类算法">分类算法</a>
         <span>/</span>
         
         
@@ -138,17 +135,7 @@
 </span>
     </div>
     <div class="post-content ">
-        <h3 id="cox比例风险模型">COX比例风险模型</h3>
-<p>Cox模型由h（t）表示的风险函数表示。 简言之，风险函数可以解释为在时刻t死亡的风险。 可以估计如下：</p>
-<p><span class="math inline">\(h(t) = h_0(t) \times exp(b_1x_1 + b_2x_2 + ... + b_px_p)\)</span></p>
-<p>其中：</p>
-<ul>
-<li><em>t</em> 代表生存时刻点</li>
-<li><em>h(t)</em>是由诸多协变量<span class="math inline">\(x_1, x_2, ..., x_p\)</span>共同决定的风险函数</li>
-<li><span class="math inline">\(b_1, b_2, ..., b_p\)</span>代表各个协变量的权重</li>
-<li>h0(t)代表基础风险函数</li>
-</ul>
-<p>实际上，风险函数h(t)由h0(t)和后面的项exp(...)所决定，如果exp(...)大于1，则xi是</p>
+        <p>一般来说，训练集占据了数据集的majority（例如百分之80），训练集用于确定模型的basic参数。而验证集（假设占据10%）则是在训练模型的过程中不断调整basic参数，也就是常说的“调参”。当模型的参数最终确定后，停止训练，采用测试集（10%）来评估模型的泛化性能。</p>
 
         
         <br />
